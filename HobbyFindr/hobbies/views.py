@@ -4,6 +4,8 @@ from django.conf import settings
 from django.shortcuts import redirect, render, redirect
 from django.urls import reverse
 from urllib.parse import quote_plus, urlencode
+from .models import Users
+
 
 oauth = OAuth()
 
@@ -30,7 +32,14 @@ def home(request):
             "session": request.session.get("user")
         }
     )
-
+def debug(request):
+    return render(
+        request,
+        "debug.html",
+        context={
+            "data":Users.objects.all()
+        }
+    )
 def callback(request):
     token = oauth.auth0.authorize_access_token(request)
     request.session["user"] = token

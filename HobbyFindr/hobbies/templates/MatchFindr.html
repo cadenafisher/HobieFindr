@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HobbyFindr</title>
+
+<!--------------------------------------------------------------->
+<!--STYLE-------------------------------------------------------->
+<!--------------------------------------------------------------->
+
+    <style>
+        /* Page Settings */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: whitesmoke;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            /*background-color: #222;*/
+            background-color: #4287f5;
+            padding: 15px 25px;
+            height: 50px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+
+        .nav-links {
+            justify-self: center;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-family: "Century Schoolbook", "Century Schoolbook L", "New Century Schoolbook", serif;
+            font-size: 20pt;
+            justify-self: start;
+            position: relative;
+            left: -20px;
+        }
+
+        .user-account {
+            justify-self: end;
+            color: #fff;
+            text-decoration: none;
+            /*padding: 8px 15px;*/
+            /*border: 1px solid #fff;*/
+            /*border-radius: 5px;*/
+        }
+        
+        .user-account:hover {
+            /*
+            background-color: #fff;
+            color: #222;
+            */
+            stroke: red;
+        }
+        
+
+        nav h2 {
+            color: #fff;
+            margin: 0;
+        }
+
+        nav a {
+            font-family: 'IBM Plex Serif', serif;
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        nav a:hover {
+            color: lightblue;
+        }
+
+        /* Home */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .hero h1 {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 20px;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 10px;
+            background-color: #222;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #555;
+        }
+
+        /* Sections */
+        section {
+            padding: 50px 20px;
+           max-width: 1100px;
+            margin: auto;
+        }
+
+        section h2 {
+            font-size: 32px;
+            text-align: center;
+        }
+
+        /* City */
+        .city {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        section {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Hobby Cards */
+        .hobby-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .hobby-card:hover {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .hobby-card.selection {
+            background-color: #007bff;
+            color: #fff; 
+        }
+
+        /* Event Cards */
+        .event-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .event-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-card h3 {
+            margin-top: 0;
+        }
+
+        .event-info {
+            margin: 8px 0;
+        }
+
+        /* Event Form */
+        .form-box {
+            background-color: #fff;
+            padding: 30px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-box input,
+        .form-box textarea,
+        .form-box select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-box textarea {
+            height: 100px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .createAccount{
+            background-color: #fff;
+            padding: 30px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            z-index: 50;
+            top: 170px;
+            display: grid;
+            align-self: center;
+            justify-self: center;
+            box-shadow: 0px 0px 20px 3px;
+        }
+
+        .formLabel{
+            font-family: 'IBM Plex Serif', serif;
+            font-weight: bolder;
+        }
+        .formTitle{
+            justify-self: center;
+            padding-top: 0;
+            margin-top: 0;
+            font-family: "Century Schoolbook", "Century Schoolbook L", "New Century Schoolbook", serif;
+            font-weight: bold;
+            font-size:30px;
+            color: #007bff;
+        }
+        .createUserIcon{
+            position: absolute;
+            top: 80px;
+            left: 250px;
+        }
+        .heading{
+            font-family: "Century Schoolbook", "Century Schoolbook L", "New Century Schoolbook", serif;
+            font-size: 40px;
+        }
+
+    </style>
+
+<!---------------------------------------------------------------->
+<!--BODY---------------------------------------------------------->
+<!---------------------------------------------------------------->
+
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <h2 class="nav-title"><a href="HobbyFindr Home.html">HobbyFindr</a></h2>
+        <div class="nav-links" style="margin-left:-40px">
+            <a href="{% url 'matchfindr' %}" style="margin:0">MatchFindr</a>
+            <a href="HobbyFindr Home.html#hobbies">Hobbies</a>
+            <a href="HobbyFindr Home.html#events">Events</a>
+            <!--<a href="#create">Create Event</a>-->
+        </div>
+
+        <!-- <a href="#account" class="user-account">User Account</a> -->
+        {% if session %}
+        <svg class = "user-account" height = "53" width="85">*/
+            <mask id="mask1">
+            <circle r="24" cx = "27" cy="26" fill="whitesmoke" stroke = "royalblue" stroke-width = "3"/>
+            </mask>
+        <a href="{% url 'logout' %}"><image width="54" height="54" href="{{session.userinfo.picture}}" mask="url(#mask1)"/>
+        </svg>
+            <!-- <a href="{% url 'logout' %}" class="user-account">Log Out</a> -->
+        {% else %}
+            <a href="{% url 'login' %}" class="user-account">Log In</a>
+        {% endif %}
+        
+    </nav>
+
+    <!-- Upcoming Events -->
+
+    <section id="events" style="padding-top: 80px; border-color: whitesmoke;">
+
+        <h2 class="heading" style="margin-bottom: 15px;">Reccomended Matches</h2>
+
+        <p style="text-align:center;">
+            Find people with similar interests.
+        </p>
+
+
+        <div class="event-container" id="eventList">
+
+
+            <!-- Event 1 -->
+
+            <div class="event-card" style="padding-bottom: 0px;">
+                <svg class = "matchIcon" height = "70" width="85">*/
+                    <circle r="30" cx = "32" cy="32" fill="mediumseagreen" stroke = "royalblue" stroke-width = "3"/>
+                </svg>
+
+                <h3 style="margin-bottom:0px">Sam Chase</h3>
+
+                <p style="margin-top:0px">
+                    sammy2003xx
+                </p>
+
+                <p class="event-info">
+                    Age: 23
+                </p>
+
+                <p class="event-info">
+                    Top Hobbies: FPS Gaming, Rock Climbing, Baseball
+                </p>
+
+                <p>
+                    Based in Dallas
+                </p>
+
+                <button class="button" style="display: block; justify-self: center; background-color: #007bff; color: white; margin-top: 35px; margin-bottom: 10px"
+                        onclick="joinEvent(this)">
+
+                    Match
+
+                </button>
+
+            </div>
+
+
+            <!-- Event 2 -->
+
+            <div class="event-card">
+                <svg class = "matchIcon" height = "70" width="85">
+                    <circle r="30" cx = "32" cy="32" fill="pink" stroke = "royalblue" stroke-width = "3"/>
+                </svg>
+
+                <h3 style="margin-bottom:0px">Lindsey Baker</h3>
+
+                <p style="margin-top:0px">
+                    linds
+                </p>
+
+                <p class="event-info">
+                    Age: 25
+                </p>
+
+                <p class="event-info">
+                    Top Hobbies: Painting, Roller Derby, Knitting
+                </p>
+
+                <p>
+                    Based in Austin
+                </p>
+
+                <button class="button" style="display: block; justify-self: center; background-color: #007bff; color: white; margin-top: 35px; margin-bottom: 10px"
+                        onclick="joinEvent(this)">
+
+                    Match
+
+                </button>
+
+            </div>
+
+
+            <!-- Event 3 -->
+
+            <div class="event-card">
+                <svg class = "matchIcon" height = "70" width="85">*/
+                    <circle r="30" cx = "32" cy="32" fill="tomato" stroke = "royalblue" stroke-width = "3"/>
+                </svg>
+
+                <h3 style="margin-bottom:0px">Hank Kelly</h3>
+
+                <p style="margin-top:0px">
+                    hankTHEtank
+                </p>
+
+                <p class="event-info">
+                    Age: 54
+                </p>
+
+                <p class="event-info">
+                    Top Hobbies: Crochet, FPS Gaming, Painting
+                </p>
+
+                <p>
+                    Based in Fort Worth
+                </p>
+
+                <button class="button" style="display: block; justify-self: center; background-color: #007bff; color: white; margin-top: 35px; margin-bottom: 10px"
+                        onclick="joinEvent(this)">
+
+                    Match
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+</body>

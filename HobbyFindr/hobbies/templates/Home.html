@@ -32,23 +32,25 @@
             width: 100%;
         }
 
-        .nav-title {
-            font-family: "Century Schoolbook", "Century Schoolbook L", "New Century Schoolbook", serif;
-            font-size: 20pt;
-            justify-self: start;
-        }
-
         .nav-links {
             justify-self: center;
             display: flex;
             align-items: center;
         }
 
+        .nav-title {
+            font-family: "Century Schoolbook", "Century Schoolbook L", "New Century Schoolbook", serif;
+            font-size: 20pt;
+            justify-self: start;
+            position: relative;
+            left: -20px;
+        }
+
         .user-account {
             justify-self: end;
             color: #fff;
             text-decoration: none;
-            padding: 0px 30px;
+            /*padding: 8px 15px;*/
             /*border: 1px solid #fff;*/
             /*border-radius: 5px;*/
         }
@@ -217,17 +219,37 @@
         .createAccount{
             background-color: #fff;
             padding: 30px;
+            min-width:370px;
             max-width: 600px;
             margin: auto;
             border-radius: 10px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             z-index: 50;
+            top: 170px;
+            display: grid;
+            align-self: center;
+            justify-self: center;
+            box-shadow: 0px 0px 20px 3px;
         }
 
         .formLabel{
             font-family: 'IBM Plex Serif', serif;
             font-weight: bolder;
+        }
+        .formTitle{
+            justify-self: center;
+            padding-top: 0;
+            margin-top: 0;
+            font-family: "Century Schoolbook", "Century Schoolbook L", "New Century Schoolbook", serif;
+            font-weight: bold;
+            font-size:30px;
+            color: #007bff;
+        }
+        .createUserIcon{
+            position: absolute;
+            top: 80px;
+            left: 250px;
         }
 
     </style>
@@ -241,9 +263,9 @@
 
     <!-- Navigation -->
     <nav>
-        <h2 class="nav-title">HobbyFindr</h2>
+        <h2 class="nav-title"><a href="#home">HobbyFindr</a></h2>
         <div class="nav-links">
-            <a href="#home">Home</a>
+            <a href="{% url 'matchfindr'%}">MatchFindr</a>
             <a href="#hobbies">Hobbies</a>
             <a href="#events">Events</a>
             <!--<a href="#create">Create Event</a>-->
@@ -251,11 +273,11 @@
 
         <!-- <a href="#account" class="user-account">User Account</a> -->
          {% if session %}
-        <svg class = "user-account" height = "53" width="53">*/
+        <svg class = "user-account" height = "53" width="85">*/
             <mask id="mask1">
             <circle r="24" cx = "27" cy="26" fill="whitesmoke" stroke = "royalblue" stroke-width = "3"/>
             </mask>
-            <image width="48" height="48" href="{{session.userinfo.picture}}" mask="url(#mask1)"/>
+        <a href="{% url 'logout' %}"><image width="54" height="54" href="{{session.userinfo.picture}}" mask="url(#mask1)"/>
         </svg>
             <!-- <a href="{% url 'logout' %}" class="user-account">Log Out</a> -->
         {% else %}
@@ -277,7 +299,7 @@
      </div>
 
          <!-- City Selection -->
-
+<!--
     <section>
 
         <div class="city-box">
@@ -300,7 +322,7 @@
 
         </div>
     </section>
-
+-->
     <!-- Hobby Section -->
     <section id="hobbies">
         <h2>Select Your Hobbies</h2>
@@ -601,7 +623,6 @@
                         class="button">
 
                     Create Event
-
                 </button>
 
             </form>
@@ -610,21 +631,33 @@
 
     </section>
 -->
-
+    {%if uidexists and session%}
     <div class = "createAccount">
-        <form id="createAccountForm">
+        <h2 class="formTitle">Create Account</h2>
+        <svg class = "createUserIcon" height = "200" width="200">*/
+            
+        <circle r="70" cx = "75" cy="75" fill="whitesmoke" stroke = "royalblue" stroke-width = "3"/>
+            <mask id="mask2">
+            <circle r="67" cx = "75" cy="75" fill="whitesmoke" stroke = "royalblue" stroke-width = "0"/>
+            </mask>
+        <image width="146" height="146" href="{{session.userinfo.picture}}" mask="url(#mask2)"/>
+        </svg>
+            
+        <form action="" method="post">
+            {% csrf_token %}
             <label class="formLabel" for="first">First Name:</label><br>
-            <input type="text" id="first" name="first"><br>
+            {{form.fname}}<br>
             <label class="formLabel" for="last">Last Name:</label><br>
-            <input type="text" id="last" name="last"><br>
+            {{form.lname}}<br>
             <label class="formLabel" for="username">Username:</label><br>
-            <input type="text" id="username" name="username"><br>
+            {{form.username}}<br>
             <label class="formLabel" for="age">Age:</label><br>
-            <input type="number" id="age" name="age"><br>
+            {{form.age}}<br>
             <label class="formLabel" for="bio">Bio:</label><br>
-            <textarea id="bio" name="bio" rows="5" cols="50"></textarea><br>
+            {{form.bio}}</textarea><br>
             <label class="formLabel" for="city">City:</label><br>
-            <input type="text" id="city" name="city"></label><br>
-            <button type="submit" class="button">Save</button>
+            {{form.city}}</label><br>
+            <input type="submit" class="button" style="justify-self: center; display: block">Save</button>
         </form>
     </div>
+    {%endif%}

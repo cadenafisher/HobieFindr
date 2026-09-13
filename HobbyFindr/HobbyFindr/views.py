@@ -4,7 +4,8 @@ from django.conf import settings
 from django.shortcuts import redirect, render, redirect
 from django.urls import reverse
 from urllib.parse import quote_plus, urlencode
-
+from hobbies.forms import InputForm
+from hobbies.models import Users
 oauth = OAuth()
 
 oauth.register(
@@ -21,12 +22,31 @@ def login(request):
     return oauth.auth0.authorize_redirect(
         request, request.build_absolute_uri(reverse("callback"))
     )
-
-def home(request):
+def debug(request):
+    user =Users(userid='google-oauth2|000000000000000000004',fname='Billy',lname="Bob", age= 42, username= 'bobbyjoe', bio= 'yeehaw', city= 'Lubbock')
+    #user.save()
     return render(
         request,
-        "HobbyFindr.html",
+        "debug.html",
         context={
+            "data":Users.objects.all().values()
+        }
+    )
+def home(request):
+    print(json.dumps(request.session.get("user"), indent=4))
+    f=InputForm(request.POST or None)
+    if f.is_valid():
+        nu=f.save(commit=False)
+        nu.userid=request.session.get("user")["userinfo"]["sub"]
+        nu.save()
+        f.save_m2m()
+
+    return render(
+        request,
+        "home.html",
+        context={
+            "uidexists":not Users.objects.filter(userid=(request.session.get("user")["userinfo"]["sub"] if request.session.get("user")!=None else "")),
+            "form":f,
             "session": request.session.get("user")
         }
     )
@@ -58,4 +78,12 @@ def index(request):
             "session": request.session.get("user"),
             "pretty": json.dumps(request.session.get("user"), indent=4),
         },
+    )
+def matchfindr(request):
+    return render(
+        request,
+        "MatchFindr.html",
+        context={
+            "session":request.session.get("user"),
+        }
     )
