@@ -22,10 +22,19 @@ def login(request):
         request, request.build_absolute_uri(reverse("callback"))
     )
 
+def home(request):
+    return render(
+        request,
+        "HobbyFindr.html",
+        context={
+            "session": request.session.get("user")
+        }
+    )
+
 def callback(request):
     token = oauth.auth0.authorize_access_token(request)
     request.session["user"] = token
-    return redirect(request.build_absolute_uri(reverse("index")))
+    return redirect(request.build_absolute_uri(reverse("home")))
 
 def logout(request):
     request.session.clear()
@@ -34,7 +43,7 @@ def logout(request):
         f"https://{settings.AUTH0_DOMAIN}/v2/logout?"
         + urlencode(
             {
-                "returnTo": request.build_absolute_uri(reverse("index")),
+                "returnTo": request.build_absolute_uri(reverse("home")),
                 "client_id": settings.AUTH0_CLIENT_ID,
             },
             quote_via=quote_plus,

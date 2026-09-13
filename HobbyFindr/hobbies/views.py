@@ -22,6 +22,15 @@ def login(request):
         request, request.build_absolute_uri(reverse("callback"))
     )
 
+def home(request):
+    return render(
+        request,
+        "HobbyFindr.html",
+        context={
+            "session": request.session.get("user")
+        }
+    )
+
 def callback(request):
     token = oauth.auth0.authorize_access_token(request)
     request.session["user"] = token

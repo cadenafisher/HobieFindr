@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HobbyHub - Discover Your Next Hobby And Explore New Hobbies</title>
+
+    <style>
+        /* Page Settings */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #222;
+            padding: 15px 25px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+        }
+
+        .nav-title {
+            justify-self: start;
+        }
+
+        .nav-links {
+            justify-self: center;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-account {
+            justify-self: end;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+
+        .user-account:hover {
+            background-color: #fff;
+            color: #222;
+        }
+
+        nav h2 {
+            color: #fff;
+            margin: 0;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        nav a:hover {
+            color: #000;
+        }
+
+        /* Home */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .hero h1 {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 20px;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 10px;
+            background-color: #222;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #555;
+        }
+
+        /* Sections */
+        section {
+            padding: 50px 20px;
+           max-width: 1100px;
+            margin: auto;
+        }
+
+        section h2 {
+            font-size: 32px;
+            text-align: center;
+        }
+
+        /* City */
+        .city {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        section {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Hobby Cards */
+        .hobby-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .hobby-card:hover {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .hobby-card.selection {
+            background-color: #007bff;
+            color: #fff; 
+        }
+
+        /* Event Cards */
+        .event-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .event-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-card h3 {
+            margin-top: 0;
+        }
+
+        .event-info {
+            margin: 8px 0;
+        }
+
+        /* Event Form */
+        .form-box {
+            background-color: #fff;
+            padding: 30px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-box input,
+        .form-box textarea,
+        .form-box select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-box textarea {
+            height: 100px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <h2 class="nav-title">HobbyHub</h2>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#hobbies">Hobbies</a>
+            <a href="#events">Events</a>
+            <a href="#create">Create Event</a>
+        </div>
+        {% if session %}
+            <a href="{% url 'logout' %}" class="user-account">Log Out</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="user-account">Log In</a>
+        {% endif %}
+    </nav>
+
+    <!-- Home Section -->
+     <div class="hero" id="home">
+        {% if session %}
+        
+        <h1>Welcome {{session.userinfo.name}}!</h1>
+        {% else %}
+        <h1>Discover Your Next Hobby</h1>
+        {% endif %}
+        <p> Discover hobbies, meet new people, and join events around your city.</p>
+        <a href="#hobbies" class="button">Find Hobbies</a>
+     </div>
+
+         <!-- City Selection -->
+
+    <section>
+
+        <div class="city-box">
+
+            <h2>Select Your City</h2>
+
+            <p>
+                Find hobbies and events happening near you.
+            </p>
+
+            <select id="city">
+
+                <option value="Lubbock">Lubbock</option>
+                <option value="Dallas">Dallas</option>
+                <option value="Austin">Austin</option>
+                <option value="Houston">Houston</option>
+                <option value="San Antonio">San Antonio</option>
+
+            </select>
+
+        </div>
+    </section>
+
+    <!-- Hobby Section -->
+    <section id="hobbies">
+        <h2>Select Your Hobbies</h2>
+        <p style="text-align: center;">
+            Select the hobbies you are intrested in.
+        </p>
+
+        <div class="hobby-container">
+            <div class="hobby-card" data-hobby="Photography">Photography</div>
+            <div class="hobby-card" data-hobby="Painting">Painting</div>
+            <div class="hobby-card" data-hobby="Cooking">Cooking</div>
+            <div class="hobby-card" data-hobby="Gardening">Gardening</div>
+            <div class="hobby-card" data-hobby="Hiking">Hiking</div>
+            <div class="hobby-card" data-hobby="Cycling">Cycling</div>
+            <div class="hobby-card" data-hobby="Yoga">Yoga</div>
+            <div class="hobby-card" data-hobby="Dancing">Dancing</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+        <button class ="button" onclick="showHobbies()">Save My Hobbies</button>
+        <p id="selectedHobbies"></p>
+        </div>
+    </section>
+
+        <!-- Discover New Hobbies -->
+
+    <section>
+
+        <h2>Discover New Hobbies</h2>
+
+        <p style="text-align:center;">
+            Try something you have never done before!
+        </p>
+
+
+        <div class="hobby-container">
+
+
+            <div class="hobby-card">
+
+                <h3>Rock Climbing</h3>
+
+                <p>
+                    Challenge yourself with indoor
+                    and outdoor climbing.
+                </p>
+
+                <button class="button">
+                    Learn More
+                </button>
+
+            </div>
+
+
+            <div class="hobby-card">
+
+                <h3>Knitting</h3>
+
+                <p>
+                    Learn how to make your own
+                    clothing and crafts.
+                </p>
+
+                <button class="button">
+                    Learn More
+                </button>
+
+            </div>
+
+
+            <div class="hobby-card">
+
+                <h3>Gardening</h3>
+
+                <p>
+                    Grow plants, flowers,
+                    fruits, and vegetables.
+                </p>
+
+                <button class="button">
+                    Learn More
+                </button>
+
+            </div>
+
+
+            <div class="hobby-card">
+
+                <h3>Chess</h3>
+
+                <p>
+                    Improve your strategy
+                    and meet other players.
+                </p>
+
+                <button class="button">
+                    Learn More
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Upcoming Events -->
+
+    <section id="events">
+
+        <h2>Upcoming Events</h2>
+
+        <p style="text-align:center;">
+            Find something fun happening in your city.
+        </p>
+
+
+        <div class="event-container" id="eventList">
+
+
+            <!-- Event 1 -->
+
+            <div class="event-card">
+
+                <h3>Saturday Hiking Group</h3>
+
+                <p class="event-info">
+                    Location: Lubbock Canyon Trail
+                </p>
+
+                <p class="event-info">
+                    Date: September 19, 2026
+                </p>
+
+                <p class="event-info">
+                    Time: 9:00 AM
+                </p>
+
+                <p>
+                    Join other hiking enthusiasts
+                    for a morning trail adventure.
+                </p>
+
+                <button class="button"
+                        onclick="joinEvent(this)">
+
+                    Join Event
+
+                </button>
+
+            </div>
+
+
+            <!-- Event 2 -->
+
+            <div class="event-card">
+
+                <h3>Photography Meetup</h3>
+
+                <p class="event-info">
+                    Location: Downtown Lubbock
+                </p>
+
+                <p class="event-info">
+                    Date: September 20, 2026
+                </p>
+
+                <p class="event-info">
+                    Time: 4:00 PM
+                </p>
+
+                <p>
+                    Bring your camera and practice
+                    photography with other hobbyists.
+                </p>
+
+                <button class="button"
+                        onclick="joinEvent(this)">
+
+                    Join Event
+
+                </button>
+
+            </div>
+
+
+            <!-- Event 3 -->
+
+            <div class="event-card">
+
+                <h3>Gaming Night</h3>
+
+                <p class="event-info">
+                    Location: Community Game Center
+                </p>
+
+                <p class="event-info">
+                    Date: September 22, 2026
+                </p>
+
+                <p class="event-info">
+                    Time: 7:00 PM
+                </p>
+
+                <p>
+                    Bring your favorite games and
+                    meet other local gamers.
+                </p>
+
+                <button class="button"
+                        onclick="joinEvent(this)">
+
+                    Join Event
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Create Event -->
+
+    <section id="create">
+
+        <h2>Create an Event</h2>
+
+        <p style="text-align:center;">
+            Create your own event and invite people
+            who share your interests.
+        </p>
+
+
+        <div class="form-box">
+
+            <form id="eventForm">
+
+
+                <label>Event Name</label>
+
+                <input type="text"
+                       id="eventName"
+                       placeholder="Example: Sunday Soccer"
+                       required>
+
+
+                <label>Hobby</label>
+
+                <select id="eventHobby">
+
+                    <option>Hiking</option>
+                    <option>Photography</option>
+                    <option>Gaming</option>
+                    <option>Cooking</option>
+                    <option>Fitness</option>
+                    <option>Art</option>
+                    <option>Music</option>
+                    <option>Sports</option>
+
+                </select>
+
+
+                <label>City</label>
+
+                <input type="text"
+                       id="eventCity"
+                       placeholder="Example: Lubbock"
+                       required>
+
+
+                <label>Date</label>
+
+                <input type="date"
+                       id="eventDate"
+                       required>
+
+
+                <label>Time</label>
+
+                <input type="time"
+                       id="eventTime"
+                       required>
+
+
+                <label>Description</label>
+
+                <textarea id="eventDescription"
+                          placeholder="Tell people about your event..."
+                          required>
+                </textarea>
+
+
+                <button type="submit"
+                        class="button">
+
+                    Create Event
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
